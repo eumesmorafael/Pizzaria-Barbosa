@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Favoritos | Pizzaria Barbosa</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <img
+          src="imagem/logo.png"
+          alt="Logo da Pizzaria Barbosa"
+          class="brand-logo"
+        />
+        <span class="logo">PIZZARIA <b>BARBOSA</b></span>
+      </div>
+      <div id="areaConta" style="display: none">
+        <span id="nomeUsuario"></span>
+        <button id="btnSair">Sair</button>
+      </div>
+      <nav>
+        <a href="index.html">Início</a>
+        <a href="index.html#ofertas">Ofertas</a>
+        <a href="cardapio.html">Cardápio</a>
+        <a href="favoritos.html" class="active">Favoritos</a>
+        <a href="carrinho.html">Carrinho</a>
+        <a href="index.html#sobre">Sobre nós</a>
+        <a href="index.html#contato">Contato</a>
+        <a href="login.html">Entrar</a>
+      </nav>
+      <a class="header-order" href="cardapio.html">PEDIR AGORA</a>
+    </header>
+
+    <section class="page-hero">
+      <span class="tag">⭐ OS MAIS QUERIDOS</span>
+      <h1>Seus favoritos</h1>
+      <p>Aquelas escolhas certeiras para pedir sem pensar duas vezes.</p>
+    </section>
+
+    <main class="favorites-page">
+      <section class="favorites-grid" id="favoritesGrid" aria-label="Pizzas favoritas"></section>
+      <div class="favorites-empty" id="favoritesEmpty" hidden>
+        <strong>Nenhum favorito por enquanto</strong>
+        <span>Clique no coração de uma pizza para guardá-la aqui.</span>
+        <a class="btn primary" href="cardapio.html">VER CARDÁPIO</a>
+      </div>
+    </main>
+
+    <footer>
+      <div class="brand">
+        <img src="imagem/logo.png" alt="Logo" class="brand-logo" /><span
+          class="logo"
+          >PIZZARIA <b>BARBOSA</b></span
+        >
+      </div>
+      <small>© 2026 Pizzaria Barbosa · Todos os direitos reservados.</small>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="javascript/supabase.js"></script>
+    <script src="javascript/conta.js"></script>
+    <script src="javascript/favoritos.js"></script>
+  </body>
+</html>

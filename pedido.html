@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Finalizar pedido | Pizzaria Barbosa</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <img
+          src="imagem/logo.png"
+          alt="Logo da Pizzaria Barbosa"
+          class="brand-logo"
+        />
+        <span class="logo">PIZZARIA <b>BARBOSA</b></span>
+      </div>
+      <div id="areaConta" style="display: none">
+        <span id="nomeUsuario"></span>
+        <button id="btnSair">Sair</button>
+      </div>
+      <nav>
+        <a href="index.html">Início</a>
+        <a href="cardapio.html">Cardápio</a>
+        <a href="favoritos.html">Favoritos</a>
+        <a href="carrinho.html">Carrinho</a>
+        <a href="index.html#sobre">Sobre nós</a>
+        <a href="index.html#contato">Contato</a>
+        <a href="login.html">Entrar</a>
+      </nav>
+    </header>
+
+    <section class="page-hero">
+      <span class="tag">🍕 QUASE LÁ</span>
+      <h1>Finalizar pedido</h1>
+      <p>Preencha seus dados e escolha como pagar.</p>
+    </section>
+
+    <main class="checkout-page">
+      <!-- Tela de pedido concluído -->
+      <div
+        class="checkout-result success"
+        id="pedidoConcluido"
+        style="display: none"
+      >
+        <h2>✅ Pedido concluído!</h2>
+        <p>Seu pedido foi recebido com sucesso e já está sendo preparado.</p>
+        <a class="btn primary" href="index.html">VOLTAR AO INÍCIO</a>
+      </div>
+
+      <!-- Tela de pedido recusado -->
+      <div
+        class="checkout-result error"
+        id="pedidoRecusado"
+        style="display: none"
+      >
+        <h2>❌ Pedido recusado</h2>
+        <p id="pedidoRecusadoMotivo">
+          Não foi possível concluir seu pedido. Tente novamente.
+        </p>
+        <button class="btn primary" type="button" id="btnTentarNovamente">
+          TENTAR NOVAMENTE
+        </button>
+      </div>
+
+      <div class="checkout-layout" id="checkoutLayout">
+        <form class="checkout-form" id="checkoutForm">
+          <h2>Dados para entrega</h2>
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="nome">Nome completo</label>
+              <input
+                id="nome"
+                name="nome"
+                type="text"
+                autocomplete="name"
+                required
+              />
+            </div>
+            <div class="form-field">
+              <label for="telefone">Telefone</label>
+              <input
+                id="telefone"
+                name="telefone"
+                type="tel"
+                autocomplete="tel"
+                placeholder="(34) 99999-9999"
+                required
+              />
+            </div>
+            <div class="form-field full">
+              <label for="endereco">Endereço completo</label>
+              <textarea
+                id="endereco"
+                name="endereco"
+                autocomplete="street-address"
+                placeholder="Rua, número, bairro e complemento"
+                required
+              ></textarea>
+            </div>
+            <div class="form-field full">
+              <label for="observacoes">Observações</label>
+              <textarea
+                id="observacoes"
+                name="observacoes"
+                placeholder="Ponto de referência, pedido sem cebola, etc."
+              ></textarea>
+            </div>
+          </div>
+
+          <h2>Forma de entrega</h2>
+          <div class="payment-options delivery-options">
+            <label class="payment-option">
+              <input type="radio" name="tipoEntrega" value="entrega" checked /> Entrega
+            </label>
+            <label class="payment-option">
+              <input type="radio" name="tipoEntrega" value="retirada" /> Retirar no local
+            </label>
+          </div>
+
+          <h2>Forma de pagamento</h2>
+          <div class="payment-options">
+            <label class="payment-option"
+              ><input type="radio" name="pagamento" value="pix" required />
+              Pix</label
+            >
+            <label class="payment-option"
+              ><input type="radio" name="pagamento" value="cartao" /> Cartão na
+              entrega</label
+            >
+            <label class="payment-option"
+              ><input type="radio" name="pagamento" value="dinheiro" />
+              Dinheiro</label
+            >
+          </div>
+
+          <div class="coupon-box">
+            <label for="cupom">Cupom de desconto</label>
+            <div class="coupon-row">
+              <input id="cupom" type="text" placeholder="Digite o código" />
+              <button class="btn secondary" type="button" id="btnAplicarCupom">APLICAR</button>
+            </div>
+          </div>
+
+          <button class="btn primary" type="submit" id="btnConfirmarPedido">
+            CONFIRMAR PEDIDO
+          </button>
+        </form>
+
+        <aside class="checkout-summary">
+          <h2>Resumo do carrinho</h2>
+          <div class="checkout-product">
+            <span>Itens</span><span id="checkoutItens">0</span>
+          </div>
+          <div class="checkout-product">
+            <span>Subtotal</span><span id="checkoutSubtotal">R$ 0,00</span>
+          </div>
+          <div class="checkout-product">
+            <span>Entrega</span><span id="checkoutEntrega">R$ 0,00</span>
+          </div>
+          <div class="checkout-product">
+            <span>Desconto</span><span id="checkoutDesconto">-R$ 0,00</span>
+          </div>
+          <div class="checkout-total">
+            <span>Total</span><span id="checkoutTotal">R$ 0,00</span>
+          </div>
+          <p class="checkout-note">
+            O valor da entrega será confirmado de acordo com o endereço informado.
+          </p>
+        </aside>
+      </div>
+    </main>
+
+    <footer>
+      <div class="brand">
+        <img src="imagem/logo.png" alt="Logo" class="brand-logo" /><span
+          class="logo"
+          >PIZZARIA <b>BARBOSA</b></span
+        >
+      </div>
+      <small>© 2026 Pizzaria Barbosa · Todos os direitos reservados.</small>
+    </footer>
+
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="javascript/supabase.js"></script>
+    <script src="javascript/conta.js"></script>
+    <script src="javascript/pedido.js"></script>
+  </body>
+</html>

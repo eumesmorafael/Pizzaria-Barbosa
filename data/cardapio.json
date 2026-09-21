@@ -1,0 +1,11 @@
+[
+  { "id": "calabresa", "nome": "Calabresa", "preco": 42 },
+  { "id": "portuguesa", "nome": "Portuguesa", "preco": 43 },
+  { "id": "frango-catupiry", "nome": "Frango com catupiry", "preco": 44 },
+  { "id": "mussarela", "nome": "Mussarela", "preco": 39 },
+  { "id": "margherita", "nome": "Margherita", "preco": 41 },
+  { "id": "quatro-queijos", "nome": "Quatro queijos", "preco": 47 },
+  { "id": "banana-canela", "nome": "Banana com canela", "preco": 36 },
+  { "id": "morango-chocolate", "nome": "Morango com chocolate", "preco": 41 },
+  { "id": "romeu-julieta", "nome": "Romeu e Julieta", "preco": 40 }
+]

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrinho | Pizzaria Barbosa</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <img src="imagem/logo.png" alt="Logo da Pizzaria Barbosa" class="brand-logo">
+    <span class="logo">PIZZARIA <b>BARBOSA</b></span>
+  </div>
+  <div id="areaConta" style="display: none;">
+  <span id="nomeUsuario"></span>
+  <button id="btnSair">Sair</button>
+</div>
+  <nav>
+    <a href="index.html">Início</a>
+    <a href="index.html#ofertas">Ofertas</a>
+    <a href="cardapio.html">Cardápio</a>
+    <a href="favoritos.html">Favoritos</a>
+    <a href="carrinho.html" class="active">Carrinho</a>
+    <a href="index.html#sobre">Sobre nós</a>
+    <a href="index.html#contato">Contato</a>
+    <a href="login.html">Entrar</a>
+  </nav>
+  <a class="header-order" href="cardapio.html">PEDIR AGORA</a>
+</header>
+
+<section class="page-hero">
+  <span class="tag">🍕 SEU PEDIDO</span>
+  <h1>Meu carrinho</h1>
+  <p>Confira seus sabores antes de finalizar.</p>
+</section>
+
+<main class="cart-page">
+  <div class="cart-layout">
+    <section class="cart-list" aria-label="Itens do carrinho">
+      <h2>Itens selecionados</h2>
+      <div id="cartItems">
+        <article class="cart-item" data-price="42">
+          <img src="imagem/OIP.jpg" alt="Pizza de calabresa">
+          <div>
+            <h3>Calabresa</h3>
+            <p>Molho de tomate, mussarela, calabresa e cebola.</p>
+            <strong class="cart-price">R$ 42,00</strong>
+            <div class="cart-controls">
+              <div class="quantity" aria-label="Quantidade de Calabresa">
+                <button type="button" data-action="decrease" aria-label="Diminuir quantidade">−</button>
+                <span>1</span>
+                <button type="button" data-action="increase" aria-label="Aumentar quantidade">+</button>
+              </div>
+              <button class="remove-button" type="button" data-action="remove">Remover</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="cart-item" data-price="44">
+          <img src="imagem/Pizza-de-frango-com-catupiry.jpg" alt="Pizza de frango com catupiry">
+          <div>
+            <h3>Frango com catupiry</h3>
+            <p>Frango desfiado, catupiry, milho e orégano.</p>
+            <strong class="cart-price">R$ 44,00</strong>
+            <div class="cart-controls">
+              <div class="quantity" aria-label="Quantidade de Frango com catupiry">
+                <button type="button" data-action="decrease" aria-label="Diminuir quantidade">−</button>
+                <span>1</span>
+                <button type="button" data-action="increase" aria-label="Aumentar quantidade">+</button>
+              </div>
+              <button class="remove-button" type="button" data-action="remove">Remover</button>
+            </div>
+          </div>
+        </article>
+      </div>
+      <div class="empty-cart" id="emptyCart" hidden>
+        <strong>Seu carrinho está vazio</strong>
+        <span>Escolha uma pizza deliciosa para começar.</span>
+        <a class="btn primary" href="cardapio.html">VER CARDÁPIO</a>
+      </div>
+    </section>
+
+    <aside class="summary-card">
+      <h2>Resumo do pedido</h2>
+      <div class="summary-row"><span>Itens</span><strong id="totalItemsValue">0</strong></div>
+      <div class="summary-row"><span>Subtotal</span><strong id="subtotalValue">R$ 0,00</strong></div>
+      <div class="summary-row"><span>Entrega</span><span>Calculada no checkout</span></div>
+      <p class="delivery-note">Entrega rápida para Uberlândia, MG.</p>
+      <div class="summary-total"><span>Total</span><strong id="totalValue">R$ 0,00</strong></div>
+      <button class="btn secondary clear-cart-btn" id="clearCartBtn" type="button">LIMPAR CARRINHO</button>
+      <a class="btn primary" href="pedido.html">FINALIZAR PEDIDO</a>
+    </aside>
+  </div>
+</main>
+
+<footer>
+  <div class="brand"><img src="imagem/logo.png" alt="Logo" class="brand-logo"><span class="logo">PIZZARIA <b>BARBOSA</b></span></div>
+  <small>© 2026 Pizzaria Barbosa · Todos os direitos reservados.</small>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="javascript/supabase.js"></script>
+<script src="javascript/conta.js"></script>
+<script src="javascript/carrinho.js"></script>
+</body>
+</html>

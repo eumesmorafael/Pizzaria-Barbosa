@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pizzaria Barbosa | Pizza do seu jeito</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div id="areaConta">
+        <span id="nomeUsuario"></span>
+        <button id="btnSair">Sair</button>
+      </div>
+      <div class="brand">
+        <img
+          src="imagem/logo.png"
+          alt="Logo da Pizzaria Barbosa"
+          class="brand-logo"
+        />
+        <span class="logo">PIZZARIA <b>BARBOSA</b></span>
+      </div>
+
+      <nav>
+        <a href="index.html">Início</a>
+        <a href="#ofertas">Ofertas</a>
+        <a href="cardapio.html">Cardápio</a>
+        <a href="favoritos.html">Favoritos</a>
+        <a href="carrinho.html">Carrinho</a>
+        <a href="#sobre">Sobre nós</a>
+        <a href="#contato">Contato</a>
+        <a href="login.html">Entrar</a>
+      </nav>
+
+      <a class="header-order" href="cardapio.html" target="_blank"
+        >PEDIR AGORA</a
+      >
+    </header>
+
+    <main>
+      <section class="hero" id="inicio">
+        <div class="hero-content">
+          <span class="tag">🍕 FEITA NA HORA</span>
+          <h1>A pizza que<br /><strong>combina com você.</strong></h1>
+          <p>
+            Massa artesanal, recheio generoso e aquele sabor que dá vontade de
+            pedir de novo.
+          </p>
+          <div class="hero-buttons">
+            <a href="cardapio.html" class="btn primary">VER CARDÁPIO</a>
+          </div>
+        </div>
+
+        <div class="hero-pizza">
+          <div class="pizza-circle">
+            <img src="imagem/OIP.jpg" alt="Pizza de calabresa" />
+          </div>
+          <span class="price-bubble">A partir de<br /><b>R$ 39</b></span>
+        </div>
+      </section>
+
+      <section class="quick-bar">
+        <div><span>🔥</span><b>Mais pedida</b><small>Calabresa</small></div>
+        <div>
+          <span>⚡</span><b>Entrega rápida</b><small>Pizza quentinha</small>
+        </div>
+        <div>
+          <span>⭐</span><b>Ingredientes selecionados</b
+          ><small>Qualidade em cada pedaço</small>
+        </div>
+      </section>
+
+      <section class="offers" id="ofertas">
+        <div class="section-heading">
+          <span class="tag dark">OFERTAS DA CASA</span>
+          <h2>Escolha sua favorita</h2>
+          <p>
+            As queridinhas da Pizzaria Barbosa para deixar seu pedido ainda
+            melhor.
+          </p>
+        </div>
+
+        <div class="offer-grid">
+          <article class="offer-card featured">
+            <div class="offer-image">
+              <img src="imagem/OIP.jpg" alt="Pizza de calabresa" />
+            </div>
+            <div class="offer-info">
+              <span class="mini-badge">MAIS PEDIDA</span>
+              <h3>Calabresa</h3>
+              <p>Molho de tomate, mussarela, calabresa e cebola.</p>
+              <div class="offer-bottom">
+                <strong>R$ 42</strong><a href="cardapio.html">Ver pizza →</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="offer-card">
+            <div class="offer-image">
+              <img
+                src="imagem/Pizza-de-frango-com-catupiry.jpg"
+                alt="Pizza de frango com catupiry"
+              />
+            </div>
+            <div class="offer-info">
+              <span class="mini-badge yellow">ESPECIAL</span>
+              <h3>Frango com catupiry</h3>
+              <p>Frango desfiado, catupiry, milho e orégano.</p>
+              <div class="offer-bottom">
+                <strong>R$ 44</strong><a href="cardapio.html">Ver pizza →</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="offer-card">
+            <div class="offer-image">
+              <img
+                src="imagem/OIP (3).webp"
+                alt="Pizza de morango com chocolate"
+              />
+            </div>
+            <div class="offer-info">
+              <span class="mini-badge pink">DOCE</span>
+              <h3>Morango com chocolate</h3>
+              <p>Chocolate, morango e creme de leite.</p>
+              <div class="offer-bottom">
+                <strong>R$ 41</strong><a href="cardapio.html">Ver pizza →</a>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <a href="cardapio.html" class="btn primary centered"
+          >VER CARDÁPIO COMPLETO</a
+        >
+      </section>
+
+      <section class="about" id="sobre">
+        <div class="about-photo">
+          <img
+            src="imagem/747855897-a-arte-e-a-historia-da-pizza-quatro-queijos-um-guia-completo.jpg"
+            alt="Pizza quatro queijos"
+          />
+        </div>
+        <div class="about-text">
+          <span class="tag dark">POR QUE BARBOSA?</span>
+          <h2>Do nosso forno<br />para sua mesa.</h2>
+          <p>
+            Na Pizzaria Barbosa, cada pizza é preparada na hora com massa
+            artesanal, ingredientes selecionados e muito cuidado.
+          </p>
+          <div class="checks">
+            <span>✓ Massa artesanal</span>
+            <span>✓ Recheio generoso</span>
+            <span>✓ Preparada na hora</span>
+            <span>✓ Entrega rápida</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="cta" id="contato">
+        <div>
+          <span class="tag">BATEU A FOME?</span>
+          <h2>Seu próximo pedaço<br />está a um clique.</h2>
+        </div>
+        <a href="cardapio.html" target="_blank" class="btn light"
+          >FAZER MEU PEDIDO</a
+        >
+      </section>
+    </main>
+
+    <footer>
+      <div class="brand">
+        <img src="imagem/logo.png" alt="Logo" class="brand-logo" />
+        <span class="logo">PIZZARIA <b>BARBOSA</b></span>
+      </div>
+      <p>Rua Josue, MG · (34) 99999-9999 · Ter a Dom, 18h às 23h</p>
+      <small>© 2026 Pizzaria Barbosa · Todos os direitos reservados.</small>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="javascript/supabase.js"></script>
+    <script src="javascript/conta.js"></script>
+  </body>
+</html>
