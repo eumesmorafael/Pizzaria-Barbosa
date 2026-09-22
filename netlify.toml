@@ -1,0 +1,28 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/config"
+  to = "/.netlify/functions/config"
+  status = 200
+
+[[redirects]]
+  from = "/criar-preferencia"
+  to = "/.netlify/functions/criar-preferencia"
+  status = 200
+
+[[redirects]]
+  from = "/api/cardapio"
+  to = "/.netlify/functions/cardapio"
+  status = 200
+
+[[redirects]]
+  from = "/api/pedidos/*"
+  to = "/.netlify/functions/pedidos/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/teste"
+  to = "/.netlify/functions/teste"
+  status = 200
