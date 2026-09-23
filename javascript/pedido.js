@@ -1,3 +1,17 @@
+async function parseJsonResponse(response, fallbackMessage) {
+  var text = await response.text();
+
+  if (!text || !text.trim()) {
+    throw new Error(fallbackMessage);
+  }
+
+  try {
+    return JSON.parse(text);
+  } catch (erro) {
+    throw new Error(fallbackMessage);
+  }
+}
+
 function lerCarrinho() {
   var dados = localStorage.getItem('pizzaria-carrinho');
   return dados ? JSON.parse(dados) : [];
@@ -163,14 +177,18 @@ document.getElementById('checkoutForm').addEventListener('submit', async functio
       })
     });
 
-    var dadosPedido = await respostaPedido.json();
+    var dadosPedido = await parseJsonResponse(respostaPedido, 'Não foi possível registrar o pedido. Verifique sua conexão e tente novamente.');
 
     if (!respostaPedido.ok) {
       throw new Error(dadosPedido.erro || 'Não foi possível registrar o pedido.');
     }
 
     var respostaConfig = await fetch('/config');
-    var configData = await respostaConfig.json();
+    var configData = await parseJsonResponse(respostaConfig, 'Não foi possível carregar a forma de pagamento.');
+
+    if (!respostaConfig.ok) {
+      throw new Error(configData.erro || 'Não foi possível carregar a forma de pagamento.');
+    }
 
     if (!configData.publicKey || !window.MercadoPago) {
       document.querySelector('#pedidoConcluido p').textContent = 'Pedido ' + dadosPedido.pedido.id + ' recebido. A pizzaria já começou a preparar tudo.';
@@ -185,7 +203,7 @@ document.getElementById('checkoutForm').addEventListener('submit', async functio
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ produtos: carrinho, tipoEntrega: resumo.entrega === 0 ? 'retirada' : 'entrega', cupom: localStorage.getItem('pizzaria-cupom') || '' })
     });
-    var dadosPreferencia = await respostaPreferencia.json();
+    var dadosPreferencia = await parseJsonResponse(respostaPreferencia, 'Pedido salvo, mas o pagamento não pôde ser iniciado.');
 
     if (!respostaPreferencia.ok) {
       throw new Error(dadosPreferencia.erro || 'Pedido salvo, mas o pagamento não pôde ser iniciado.');
