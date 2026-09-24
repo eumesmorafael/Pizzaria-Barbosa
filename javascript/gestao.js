@@ -110,6 +110,20 @@ function renderStats() {
   const budgets = state.records.orcamentos || [];
   const revenue = budgets.reduce((total, item) => total + Number(item.receita || 0), 0);
   document.getElementById("managementStats").innerHTML = `<article><span>Eventos cadastrados</span><strong>${events.length}</strong><small>Agenda operacional</small></article><article><span>Cadastros ativos</span><strong>${all.length}</strong><small>Todos os módulos</small></article><article><span>Receita prevista</span><strong>${money(revenue)}</strong><small>Orçamentos registrados</small></article><article><span>Contratações</span><strong>${(state.records.contratacoes || []).length}</strong><small>Fornecedores e serviços</small></article>`;
+  renderAgenda();
+}
+
+function renderAgenda() {
+  const agenda = document.getElementById("agendaList");
+  const events = (state.records.eventos || []).filter((event) => event.data).sort((first, second) => first.data.localeCompare(second.data)).slice(0, 4);
+  if (!events.length) {
+    agenda.innerHTML = `<div class="agenda-empty">Nenhum evento com data cadastrada ainda. Adicione a data ao criar um evento para acompanhar sua agenda aqui.</div>`;
+    return;
+  }
+  agenda.innerHTML = events.map((event) => {
+    const date = new Date(`${event.data}T12:00:00`).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" }).replace(".", "");
+    return `<article class="agenda-item"><strong>${date}</strong><div><b>${event.nome || "Evento sem nome"}</b><span>${event.cidade || "Cidade não informada"} · ${event.local || "Local não informado"}</span></div><em>${event.status || "Planejado"}</em></article>`;
+  }).join("");
 }
 
 function openDialog(id = null) {
@@ -156,4 +170,5 @@ document.getElementById("closeDialog").addEventListener("click", () => dialog.cl
 document.getElementById("cancelDialog").addEventListener("click", () => dialog.close());
 form.addEventListener("submit", saveRecord);
 search.addEventListener("input", renderTable);
+document.getElementById("openEventsButton").addEventListener("click", () => selectResource("eventos"));
 loadData().catch(() => { table.innerHTML = `<div class="empty-state"><strong>Não foi possível carregar a gestão</strong><span>Recarregue a página e tente novamente.</span></div>`; });
