@@ -268,7 +268,7 @@ document.getElementById('checkoutForm').addEventListener('submit', async functio
     localStorage.removeItem('pizzaria-carrinho');
 
   } catch (erro) {
-    var apiIndisponivel = !respostaPedido || respostaPedido.status === 404 || erro instanceof TypeError;
+    var apiIndisponivel = !respostaPedido || [404, 405].includes(respostaPedido.status) || erro instanceof TypeError;
     if (apiIndisponivel) {
       concluirPedidoLocal({
         nome: nome,
