@@ -48,6 +48,7 @@ body {
   gap: 24px;
 }
 .management-intro { margin-bottom: 28px; }
+.intro-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
 .management-intro h1 { font-size: clamp(2rem, 4vw, 3.6rem); line-height: 1; margin-bottom: 12px; }
 .management-intro p, #resourceDescription { color: var(--muted); }
 .management-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 30px; }
@@ -107,6 +108,7 @@ body {
   .management-layout { grid-template-columns: 1fr; }
   .management-nav { grid-template-columns: repeat(2, 1fr); }
   .management-toolbar, .management-intro { align-items: flex-start; flex-direction: column; }
+  .intro-actions { justify-content: flex-start; }
   .toolbar-actions { width: 100%; }
   #resourceSearch { width: 100%; }
 }

@@ -37,6 +37,14 @@ function writeLocalData(data) {
   localStorage.setItem(localStorageKey, JSON.stringify({ data }));
 }
 
+function downloadFile(name, content, type) {
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(new Blob([content], { type }));
+  link.download = name;
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
 async function managementRequest(url, options = {}) {
   try {
     const response = await fetch(url, options);
@@ -152,6 +160,10 @@ function openDialog(id = null) {
 async function saveRecord(event) {
   event.preventDefault();
   const record = Object.fromEntries(new FormData(form).entries());
+  if (record.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(record.email)) return alert("Informe um e-mail válido.");
+  if (record.documento && ![11, 14].includes(record.documento.replace(/\D/g, "").length)) return alert("CPF ou CNPJ inválido.");
+  const numericFields = ["valor", "salario", "receita", "despesas", "impostos", "comissao", "lucro", "publico"];
+  if (numericFields.some((key) => record[key] !== "" && Number(record[key]) < 0)) return alert("Valores e quantidades não podem ser negativos.");
   const url = `/api/gestao/${state.resource}${state.editingId ? `/${state.editingId}` : ""}`;
   try {
     await managementRequest(url, { method: state.editingId ? "PUT" : "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(record) });
@@ -180,6 +192,22 @@ async function loadData() {
 }
 
 document.getElementById("newRecordButton").addEventListener("click", () => openDialog());
+document.getElementById("backupButton").addEventListener("click", () => downloadFile(`backup-gestao-${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify({ exportadoEm: new Date().toISOString(), data: state.records }, null, 2), "application/json"));
+document.getElementById("restoreButton").addEventListener("click", () => document.getElementById("restoreInput").click());
+document.getElementById("restoreInput").addEventListener("change", async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+  try {
+    const backup = JSON.parse(await file.text());
+    const data = backup.data || backup;
+    if (!data.eventos || !confirm("Restaurar este backup e substituir os dados locais?")) return;
+    writeLocalData({ ...emptyManagementData(), ...data });
+    await loadData();
+  } catch (error) {
+    alert("Arquivo de backup inválido.");
+  }
+  event.target.value = "";
+});
 document.getElementById("closeDialog").addEventListener("click", () => dialog.close());
 document.getElementById("cancelDialog").addEventListener("click", () => dialog.close());
 form.addEventListener("submit", saveRecord);

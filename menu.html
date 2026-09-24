@@ -14,7 +14,7 @@
 <main class="management-shell">
     <section class="management-intro">
         <div><span class="tag dark">CENTRAL OPERACIONAL</span><h1>Gestão de eventos</h1><p>Cadastre, pesquise e acompanhe todas as informações da sua operação.</p></div>
-        <button class="btn primary" id="newRecordButton">Novo cadastro</button>
+        <div class="intro-actions"><button class="btn secondary" id="backupButton" type="button">Baixar backup</button><button class="btn secondary" id="restoreButton" type="button">Restaurar backup</button><input id="restoreInput" type="file" accept="application/json" hidden><button class="btn primary" id="newRecordButton" type="button">Novo cadastro</button></div>
     </section>
     <section class="management-stats" id="managementStats"></section>
     <section class="agenda-preview">
