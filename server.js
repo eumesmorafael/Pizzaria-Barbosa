@@ -14,6 +14,19 @@ const rootDir = __dirname;
 const dataDir = path.join(rootDir, "data");
 const catalogPath = path.join(dataDir, "cardapio.json");
 const ordersPath = path.join(dataDir, "pedidos.json");
+const managementPath = path.join(dataDir, "gestao.json");
+
+const managementResources = [
+  "eventos",
+  "fornecedores",
+  "funcionarios",
+  "patrocinadores",
+  "produtos",
+  "convidados",
+  "contratacoes",
+  "orcamentos",
+  "historico"
+];
 
 app.use(express.json());
 app.use(express.static(rootDir));
@@ -29,6 +42,27 @@ function lerJson(caminho, valorPadrao) {
 function salvarJson(caminho, valor) {
   fs.mkdirSync(dataDir, { recursive: true });
   fs.writeFileSync(caminho, JSON.stringify(valor, null, 2));
+}
+
+function lerGestao() {
+  const vazio = managementResources.reduce((dados, recurso) => {
+    dados[recurso] = [];
+    return dados;
+  }, {});
+  const dados = lerJson(managementPath, vazio);
+  return { ...vazio, ...dados };
+}
+
+function salvarGestao(dados) {
+  salvarJson(managementPath, dados);
+}
+
+function normalizarRegistro(dados) {
+  return Object.entries(dados || {}).reduce((registro, [chave, valor]) => {
+    if (chave === "id") return registro;
+    registro[chave] = typeof valor === "string" ? normalizarTexto(valor, 500) : valor;
+    return registro;
+  }, {});
 }
 
 function normalizarTexto(valor, limite) {
@@ -99,6 +133,55 @@ app.get("/teste", function (req, res) {
 
 app.get("/api/cardapio", function (req, res) {
   res.json(lerJson(catalogPath, []));
+});
+
+app.get("/api/gestao", function (req, res) {
+  res.json(lerGestao());
+});
+
+app.get("/api/gestao/:recurso", function (req, res) {
+  if (!managementResources.includes(req.params.recurso)) {
+    return res.status(404).json({ erro: "Módulo não encontrado." });
+  }
+  res.json(lerGestao()[req.params.recurso]);
+});
+
+app.post("/api/gestao/:recurso", function (req, res) {
+  const recurso = req.params.recurso;
+  if (!managementResources.includes(recurso)) {
+    return res.status(404).json({ erro: "Módulo não encontrado." });
+  }
+  const dados = lerGestao();
+  const registro = { id: crypto.randomUUID(), criadoEm: new Date().toISOString(), ...normalizarRegistro(req.body) };
+  dados[recurso].push(registro);
+  salvarGestao(dados);
+  res.status(201).json(registro);
+});
+
+app.put("/api/gestao/:recurso/:id", function (req, res) {
+  const recurso = req.params.recurso;
+  if (!managementResources.includes(recurso)) {
+    return res.status(404).json({ erro: "Módulo não encontrado." });
+  }
+  const dados = lerGestao();
+  const indice = dados[recurso].findIndex((item) => item.id === req.params.id);
+  if (indice < 0) return res.status(404).json({ erro: "Registro não encontrado." });
+  dados[recurso][indice] = { ...dados[recurso][indice], ...normalizarRegistro(req.body) };
+  salvarGestao(dados);
+  res.json(dados[recurso][indice]);
+});
+
+app.delete("/api/gestao/:recurso/:id", function (req, res) {
+  const recurso = req.params.recurso;
+  if (!managementResources.includes(recurso)) {
+    return res.status(404).json({ erro: "Módulo não encontrado." });
+  }
+  const dados = lerGestao();
+  const quantidadeInicial = dados[recurso].length;
+  dados[recurso] = dados[recurso].filter((item) => item.id !== req.params.id);
+  if (dados[recurso].length === quantidadeInicial) return res.status(404).json({ erro: "Registro não encontrado." });
+  salvarGestao(dados);
+  res.status(204).end();
 });
 
 app.get("/api/pedidos/:id", function (req, res) {
