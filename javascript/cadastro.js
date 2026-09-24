@@ -13,6 +13,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
   registerMessage.style.display = 'none';
 
   if (password !== confirmation) {
+    registerError.textContent = 'As senhas não coincidem.';
     registerError.style.display = 'block';
     return;
   }
@@ -40,12 +41,3 @@ document.getElementById('registerForm').addEventListener('submit', async functio
   registerMessage.style.display = 'block';
   form.reset();
 });
-const { data, error } = await supabaseClient.auth.signUp({ email, password });
-
-if (data.user) {
-  await supabaseClient.from('usuarios').insert({
-    id: data.user.id,
-    nome: nome,
-    telefone: telefone
-  });
-}

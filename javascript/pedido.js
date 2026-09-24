@@ -198,6 +198,20 @@ document.getElementById('checkoutForm').addEventListener('submit', async functio
       })
     });
 
+    if ([404, 405].includes(respostaPedido.status)) {
+      concluirPedidoLocal({
+        nome: nome,
+        telefone: telefone,
+        endereco: endereco,
+        pagamento: pagamento,
+        carrinho: carrinho,
+        resumo: resumo
+      });
+      btnConfirmar.disabled = false;
+      btnConfirmar.textContent = 'CONFIRMAR PEDIDO';
+      return;
+    }
+
     var dadosPedido = await parseJsonResponse(respostaPedido, 'Não foi possível registrar o pedido. Verifique sua conexão e tente novamente.');
 
     if (!respostaPedido.ok) {

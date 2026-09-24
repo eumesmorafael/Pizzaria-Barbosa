@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --check server.js && node --check javascript/cadastro.js && node --check javascript/login.js && node --check javascript/conta.js && node --check javascript/cardapio.js && node --check javascript/carrinho.js && node --check javascript/favoritos.js && node --check javascript/pedido.js && node --check javascript/gestao.js"
   },
   "keywords": [],
   "author": "",
@@ -14,5 +14,8 @@
     "dotenv": "^18.0.0",
     "express": "^5.2.1",
     "mercadopago": "^3.6.1"
+  },
+  "devDependencies": {
+    "@ljharb/tsconfig": "^0.3.2"
   }
 }
