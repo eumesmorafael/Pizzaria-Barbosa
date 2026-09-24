@@ -16,6 +16,55 @@ const table = document.getElementById("resourceTable");
 const search = document.getElementById("resourceSearch");
 const dialog = document.getElementById("recordDialog");
 const form = document.getElementById("recordForm");
+const localStorageKey = "thirtyone-gestao-dados";
+
+function emptyManagementData() {
+  return Object.keys(resourceDefinitions).reduce((data, resource) => {
+    data[resource] = [];
+    return data;
+  }, {});
+}
+
+function readLocalData() {
+  try {
+    return { ...emptyManagementData(), ...JSON.parse(localStorage.getItem(localStorageKey) || "{}").data };
+  } catch (error) {
+    return emptyManagementData();
+  }
+}
+
+function writeLocalData(data) {
+  localStorage.setItem(localStorageKey, JSON.stringify({ data }));
+}
+
+async function managementRequest(url, options = {}) {
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok) throw new Error("API indisponível");
+    return response.status === 204 ? null : response.json();
+  } catch (error) {
+    const data = readLocalData();
+    const parts = url.split("/").filter(Boolean);
+    const resourceIndex = parts.indexOf("gestao") + 1;
+    const resource = parts[resourceIndex];
+    const id = parts[resourceIndex + 1] || null;
+    const method = options.method || "GET";
+    if (method === "GET") return resource ? data[resource] || [] : data;
+    if (!resource || !data[resource]) throw error;
+    if (method === "POST") {
+      const record = { id: crypto.randomUUID(), criadoEm: new Date().toISOString(), ...JSON.parse(options.body) };
+      data[resource].push(record);
+      writeLocalData(data);
+      return record;
+    }
+    const index = data[resource].findIndex((record) => record.id === id);
+    if (index < 0) throw error;
+    if (method === "PUT") data[resource][index] = { ...data[resource][index], ...JSON.parse(options.body) };
+    if (method === "DELETE") data[resource].splice(index, 1);
+    writeLocalData(data);
+    return method === "DELETE" ? null : data[resource][index];
+  }
+}
 
 function money(value) {
   const number = Number(value);
@@ -68,7 +117,7 @@ function openDialog(id = null) {
   const definition = resourceDefinitions[state.resource];
   const record = (state.records[state.resource] || []).find((item) => item.id === id) || {};
   document.getElementById("dialogTitle").textContent = `${id ? "Editar" : "Novo"} ${definition.label.toLowerCase()}`;
-  document.getElementById("formFields").innerHTML = Object.entries(definition.fields).map(([key, label]) => `<label>${label}<input name="${key}" type="${["data", "nascimento"].includes(key) ? "date" : ["valor", "salario", "receita", "despesas", "impostos", "comissao", "lucro", "publico"].includes(key) ? "number" : "text"}" value="${String(record[key] || "").replaceAll('"', "&quot;")}" ${["descricao", "observacoes"].includes(key) ? "maxlength=500" : "required"}></label>`).join("");
+  document.getElementById("formFields").innerHTML = Object.entries(definition.fields).map(([key, label]) => `<label>${label}<input name="${key}" type="${["data", "nascimento"].includes(key) ? "date" : ["valor", "salario", "receita", "despesas", "impostos", "comissao", "lucro", "publico"].includes(key) ? "number" : "text"}" value="${String(record[key] || "").replaceAll('"', "&quot;")}" ${["descricao", "observacoes"].includes(key) ? "maxlength=500" : ["nome", "evento"].includes(key) ? "required" : ""}></label>`).join("");
   dialog.showModal();
 }
 
@@ -76,22 +125,27 @@ async function saveRecord(event) {
   event.preventDefault();
   const record = Object.fromEntries(new FormData(form).entries());
   const url = `/api/gestao/${state.resource}${state.editingId ? `/${state.editingId}` : ""}`;
-  const response = await fetch(url, { method: state.editingId ? "PUT" : "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(record) });
-  if (!response.ok) return alert("Não foi possível salvar o registro.");
+  try {
+    await managementRequest(url, { method: state.editingId ? "PUT" : "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(record) });
+  } catch (error) {
+    return alert("Não foi possível salvar o registro.");
+  }
   await loadData();
   dialog.close();
 }
 
 async function deleteRecord(id) {
   if (!confirm("Excluir este registro?")) return;
-  const response = await fetch(`/api/gestao/${state.resource}/${id}`, { method: "DELETE" });
-  if (!response.ok) return alert("Não foi possível excluir o registro.");
+  try {
+    await managementRequest(`/api/gestao/${state.resource}/${id}`, { method: "DELETE" });
+  } catch (error) {
+    return alert("Não foi possível excluir o registro.");
+  }
   await loadData();
 }
 
 async function loadData() {
-  const response = await fetch("/api/gestao");
-  state.records = await response.json();
+  state.records = await managementRequest("/api/gestao");
   renderStats();
   buildNavigation();
   selectResource(state.resource);
@@ -102,4 +156,4 @@ document.getElementById("closeDialog").addEventListener("click", () => dialog.cl
 document.getElementById("cancelDialog").addEventListener("click", () => dialog.close());
 form.addEventListener("submit", saveRecord);
 search.addEventListener("input", renderTable);
-loadData().catch(() => { table.innerHTML = `<div class="empty-state"><strong>Servidor indisponível</strong><span>Inicie o projeto com <code>npm start</code> para carregar a gestão.</span></div>`; });
+loadData().catch(() => { table.innerHTML = `<div class="empty-state"><strong>Não foi possível carregar a gestão</strong><span>Recarregue a página e tente novamente.</span></div>`; });
