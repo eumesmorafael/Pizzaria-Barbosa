@@ -104,6 +104,20 @@ function renderTable() {
   table.querySelectorAll("[data-action=delete]").forEach((button) => button.addEventListener("click", () => deleteRecord(button.dataset.id)));
 }
 
+function exportCurrentResource() {
+  const definition = resourceDefinitions[state.resource];
+  const query = search.value.trim().toLowerCase();
+  const records = (state.records[state.resource] || []).filter((record) => !query || Object.values(record).some((value) => String(value).toLowerCase().includes(query)));
+  const columns = Object.entries(definition.fields);
+  const csvValue = (value) => `"${String(value ?? "").replaceAll('"', '""')}"`;
+  const csv = [columns.map(([, label]) => csvValue(label)).join(";"), ...records.map((record) => columns.map(([key]) => csvValue(record[key])).join(";"))].join("\n");
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" }));
+  link.download = `${state.resource}.csv`;
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
 function renderStats() {
   const all = Object.values(state.records).flat();
   const events = state.records.eventos || [];
@@ -170,5 +184,6 @@ document.getElementById("closeDialog").addEventListener("click", () => dialog.cl
 document.getElementById("cancelDialog").addEventListener("click", () => dialog.close());
 form.addEventListener("submit", saveRecord);
 search.addEventListener("input", renderTable);
+document.getElementById("exportButton").addEventListener("click", exportCurrentResource);
 document.getElementById("openEventsButton").addEventListener("click", () => selectResource("eventos"));
 loadData().catch(() => { table.innerHTML = `<div class="empty-state"><strong>Não foi possível carregar a gestão</strong><span>Recarregue a página e tente novamente.</span></div>`; });

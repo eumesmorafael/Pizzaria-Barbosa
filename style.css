@@ -76,6 +76,8 @@ body {
 .management-nav-item.active b { color: var(--yellow); }
 .management-content { background: #fff; border: 1px solid var(--line); padding: 26px; min-width: 0; }
 .management-toolbar { margin-bottom: 24px; }
+.toolbar-actions { display: flex; align-items: center; gap: 10px; }
+.export-button { white-space: nowrap; padding: 11px 14px; }
 .management-toolbar h2 { margin-bottom: 4px; }
 #resourceSearch { width: min(320px, 100%); border: 1px solid var(--line); padding: 12px 14px; font: inherit; }
 .management-table-wrap { overflow-x: auto; }
@@ -105,6 +107,7 @@ body {
   .management-layout { grid-template-columns: 1fr; }
   .management-nav { grid-template-columns: repeat(2, 1fr); }
   .management-toolbar, .management-intro { align-items: flex-start; flex-direction: column; }
+  .toolbar-actions { width: 100%; }
   #resourceSearch { width: 100%; }
 }
 @media (max-width: 520px) {
