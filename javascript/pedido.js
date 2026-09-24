@@ -53,6 +53,27 @@ function obterResumoPedido() {
   };
 }
 
+function concluirPedidoLocal(dados) {
+  var pedidos = JSON.parse(localStorage.getItem('pizzaria-pedidos-locais') || '[]');
+  var pedido = {
+    id: 'LOCAL-' + Date.now().toString(36).toUpperCase(),
+    criadoEm: new Date().toISOString(),
+    status: 'recebido no dispositivo',
+    cliente: dados.nome,
+    telefone: dados.telefone,
+    endereco: dados.endereco,
+    pagamento: dados.pagamento,
+    itens: dados.carrinho,
+    total: dados.resumo.total
+  };
+  pedidos.push(pedido);
+  localStorage.setItem('pizzaria-pedidos-locais', JSON.stringify(pedidos));
+  document.querySelector('#pedidoConcluido p').textContent = 'Pedido ' + pedido.id + ' registrado neste dispositivo. A confirmação online será ativada quando o backend estiver conectado.';
+  document.getElementById('checkoutLayout').style.display = 'none';
+  document.getElementById('pedidoConcluido').style.display = 'block';
+  localStorage.removeItem('pizzaria-carrinho');
+}
+
 function atualizarResumoCarrinho() {
   var resumo = obterResumoPedido();
   var checkoutTotal = document.getElementById('checkoutTotal');
@@ -247,6 +268,20 @@ document.getElementById('checkoutForm').addEventListener('submit', async functio
     localStorage.removeItem('pizzaria-carrinho');
 
   } catch (erro) {
+    var apiIndisponivel = !respostaPedido || respostaPedido.status === 404 || erro instanceof TypeError;
+    if (apiIndisponivel) {
+      concluirPedidoLocal({
+        nome: nome,
+        telefone: telefone,
+        endereco: endereco,
+        pagamento: pagamento,
+        carrinho: lerCarrinho(),
+        resumo: obterResumoPedido()
+      });
+      btnConfirmar.disabled = false;
+      btnConfirmar.textContent = 'CONFIRMAR PEDIDO';
+      return;
+    }
     pedidoRecusadoMotivo.textContent = erro.message || 'Não foi possível concluir seu pedido. Tente novamente.';
     checkoutLayout.style.display = 'none';
     pedidoRecusado.style.display = 'block';
