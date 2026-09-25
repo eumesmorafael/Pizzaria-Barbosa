@@ -51,9 +51,9 @@ function criarPedido(dados) {
   }
 
   return {
-    id: `PB-${Date.now().toString(36).toUpperCase()}-${crypto.randomBytes(2).toString("hex").toUpperCase()}`,
+    id: crypto.randomUUID(),
     criadoEm: new Date().toISOString(),
-    status: "recebido",
+    status: "pendente",
     nome,
     telefone,
     endereco: dados.tipoEntrega === "retirada" ? "Retirada no balcão" : endereco,
@@ -72,7 +72,17 @@ async function salvarPedido(pedido) {
       "Content-Type": "application/json",
       Prefer: "return=minimal"
     },
-    body: JSON.stringify({ id: pedido.id, criado_em: pedido.criadoEm, status: pedido.status, dados: pedido })
+    body: JSON.stringify({
+      id: pedido.id,
+      nome: pedido.nome,
+      telefone: pedido.telefone,
+      endereco: pedido.endereco,
+      pagamento: pedido.pagamento,
+      total: pedido.total,
+      status: pedido.status,
+      criado_em: pedido.criadoEm,
+      dados: pedido
+    })
   });
 
   if (!resposta.ok) {
